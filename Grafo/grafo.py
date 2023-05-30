@@ -123,3 +123,25 @@ class GrafoListaAdj(Grafo):
             self.L[i] = GrafoListaAdj.NoAresta() #nó cabeça
         self.VizinhancaDuplamenteLigada = VizinhancaDuplamenteLigada
     
+    def AdicionarAresta(self, u, v):
+        """
+        Adicionar aresta uv.
+        """
+        def AdicionarLista(u, v, e, Tipo):
+            No = GrafoListaAdj.NoAresta()
+            No.Viz, No.e, No.Prox, self.L[u].Prox = v, e, self.L[u].Prox, No
+            if self.VizinhancaDuplamenteLigada:
+                self.L[u].Prox.Ant = self.L[u]
+                if self.L[u].Prox.Prox != None:
+                    self.L[u].Prox.Prox.Ant = self.L[u].Prox
+            if self.orientado:
+                No.Tipo = Tipo
+            return No
+        
+        e = GrafoListaAdj.Aresta()
+        e.v1, e.v2 = u, v
+        e.No1 = AdicionarLista(u, v, e, "+")
+        e.No2 = AdicionarLista(v, u, e, "-")
+        self.m = self.m+1
+        return e
+    
